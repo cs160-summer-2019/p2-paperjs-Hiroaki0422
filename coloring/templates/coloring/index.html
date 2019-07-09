@@ -54,26 +54,52 @@
 				options: [],
 				$container: $('#color-palette')
 			}
-
+      console.log('cp1')
 			// your rectangle gradient interaction goes in this function
 			// you may also add code outside of the function (e.g., global variables)
+      
+      
 			function myGradientInteraction(){
+        var path = new paper.Path.Rectangle({
+        topLeft:  [295, 295],
+        bottomRight: [455, 455],
+        fillColor: '#ff0000'  
+      })
 				var tool = new paper.Tool();
-
+        var mousedownPos;
+        
 				tool.onMouseDown = function (event) {
-
+          console.log(cp)
+          var hit = mandala.item.hitTest(event.point, { tolerance: 10, fill: true });
+				    if (hit) {
+				      hit.item.fillColor = cp.history[cp.history.length - 1];
+            }
+          if (event.point.x > 295 && event.point.x < 455 && event.point.y < 455 && event.point.y > 295) {
+              musedownPos = [event.point.x, event.point.y]
+          }
 				}
 
 				tool.onMouseUp = function (event) {
-					
+          console.log(cp)
+					var path = new paper.Path.Rectangle({
+        topLeft:  [295, 295],
+        bottomRight: [455, 455],
+        fillColor: {
+          gradient: {
+            stops: [cp.history.pop(), 'red', cp.history.pop()]
+          },
+          origin: mousedownPos,
+          destination: [event.point.x, event.point.y]
+        } 
+      })
 				}
 			}
-
+      
 			// your custom interaction goes here!
 			// you may replace everything
 			function myCustomInteraction() {
 				var tool = new paper.Tool();
-
+        console.log(STOP2)
 				tool.onMouseDown = function (event) {
 				    var hit = mandala.item.hitTest(event.point, { tolerance: 10, fill: true });
 				    if (hit) {
@@ -116,7 +142,7 @@
 
 				paper.project.importSVG(mandala.filePath, function(item) { 
 					mandala.item = item._children["design-freepik"];
-				    paper.project.insertLayer(0,mandala.item);
+				    paper.project.insertLayer(0, mandala.item);
 
 				    if (custom) {
 				    	myCustomInteraction();	
