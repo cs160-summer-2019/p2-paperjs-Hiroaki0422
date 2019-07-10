@@ -80,18 +80,24 @@
 				}
 
 				tool.onMouseUp = function (event) {
-          console.log(cp)
-					var path = new paper.Path.Rectangle({
+          if (event.point.x > 295 && event.point.x < 455 && event.point.y < 455 && event.point.y > 295) {
+              musedownPos = [event.point.x, event.point.y]
+            for (let i = 0; i < cp.history.length-1; i++) {
+              console.log(i, cp.history[i])
+            }
+            
+            var path = new paper.Path.Rectangle({
         topLeft:  [295, 295],
         bottomRight: [455, 455],
         fillColor: {
           gradient: {
-            stops: [cp.history.pop(), 'red', cp.history.pop()]
+            stops: [cp.history[cp.history.length-2],  cp.history[cp.history.length-2], cp.history[cp.history.length-1]]
           },
           origin: mousedownPos,
           destination: [event.point.x, event.point.y]
         } 
       })
+          }
 				}
 			}
       
